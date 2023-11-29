@@ -1,0 +1,26 @@
+from engine.game_object import GameObject
+
+
+class Camera:
+    def __init__(self, position, zoom):
+        self.position = position
+        self.zoom = zoom
+        self.target: GameObject = None
+        self.lerp_factor = 0.1
+        self.offset_x = 0
+        self.offset_y = 0
+
+    def follow(self, target, offset_x, offset_y, lerp_factor=0.1):
+        self.target = target
+        self.lerp_factor = lerp_factor
+        self.offset_x = offset_x
+        self.offset_y = offset_y
+
+    def update(self, delta_time):
+        if self.target is not None:
+            target_x, target_y = self.target.x, self.target.y
+            # target_x -= self.target.core.width / (2 * self.zoom)  # Keep the target at the horizontal center
+            target_x -= self.offset_x  # Keep the target at the horizontal center
+            target_y -= self.offset_y
+            self.position[0] += (target_x - self.position[0]) * self.lerp_factor
+            self.position[1] += (target_y - self.position[1]) * self.lerp_factor
