@@ -2,6 +2,7 @@ from __future__ import annotations
 import math
 
 from engine.component.component import Component
+from engine.game_object import GameObject
 
 
 class CircularMotionComponent(Component):
@@ -183,7 +184,7 @@ class PhysicsComponent(Component):
 
 class RigidBodyComponent(Component):
 
-    def __init__(self, game_object, gravity=500, mass: float = 1.0):
+    def __init__(self, game_object: GameObject, gravity=500, mass: float = 1.0):
         super().__init__(game_object)
         self.mass = mass
         self.gravity = gravity

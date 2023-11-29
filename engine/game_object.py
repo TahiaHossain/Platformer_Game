@@ -25,21 +25,22 @@ class GameObject(ABC):
     def on_update(self, delta_time):
         pass
 
-    def draw(self):
-        self.on_draw()
-
     @abstractmethod
     def on_draw(self):
         pass
 
     def start(self):
+        self.on_start()
         for component in self.components:
             component.start()
 
     def update(self, delta_time):
+        self.on_update(delta_time)
         for component in self.components:
             component.update(delta_time)
-        self.on_update(delta_time)
+
+    def draw(self):
+        self.on_draw()
 
     def add_child(self, child: GameObject):
         if child.parent is not None:
