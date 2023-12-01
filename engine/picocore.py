@@ -70,6 +70,7 @@ class PicoCore:
 
         glutSwapBuffers()
 
+
     def __update(self, value):
         if not self.game_over:
             current_frame_time = time.time()
