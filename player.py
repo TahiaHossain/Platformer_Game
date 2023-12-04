@@ -12,7 +12,7 @@ class Player(GameObject):
 
     def on_start(self):
         self.add_component(PhysicsComponent(self))
-        self.add_component(RigidBodyComponent(self))
+        # self.add_component(RigidBodyComponent(self))
 
     def on_update(self, delta_time):
         physics_component: PhysicsComponent = self.get_component(PhysicsComponent)

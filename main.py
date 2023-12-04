@@ -22,10 +22,12 @@ class Test(GameObject):
 
 test = Test(engine, (engine.width / 2) - 100, engine.height / 2)
 
-player = Player(engine, 100, 400)
+player = Player(engine, 100, 100)
 enemy = Enemy(engine, 200, 200)
 
 engine.add_game_object(test)
 engine.add_game_object(player)
 engine.add_game_object(enemy)
+
+engine.camera.follow(player, offset_x=100, offset_y=100)
 engine.run()
