@@ -12,7 +12,7 @@ class Player(GameObject):
 
     def on_start(self):
         self.add_component(PhysicsComponent(self))
-        # self.add_component(RigidBodyComponent(self))
+        self.add_component(RigidBodyComponent(self))
 
     def on_update(self, delta_time):
         physics_component: PhysicsComponent = self.get_component(PhysicsComponent)
@@ -22,6 +22,8 @@ class Player(GameObject):
                 physics_component.velocity_x += 1 * delta_time
             elif PicoCore.is_pressed(Keys.a):
                 physics_component.velocity_x -= 1 * delta_time
+            if PicoCore.is_pressed(Keys.SPACE):
+                physics_component.velocity_y += 10 * delta_time
 
     def on_draw(self):
         Draw.change_color("#FFFFFF")
