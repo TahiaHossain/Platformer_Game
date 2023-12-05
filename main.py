@@ -2,32 +2,64 @@ from engine.draw import Draw
 from engine.game_object import GameObject
 from engine.picocore import PicoCore
 from player import Player
+from _platform import Platform
 from enemy import Enemy
+from floor import Floor
 
-engine = PicoCore("Platformer", 700, 500)
+level_layout = [
+    "",
+    "",
+    "",
+    "#####",
+    "           ####     ###",
+    "",
+    "",
+    "###############    ####"
+    ]
+PLATFORM_SIZE = 50
+WIDTH = 700
+HEIGHT = len(level_layout) * PLATFORM_SIZE
 
+engine = PicoCore("Platformer", WIDTH, HEIGHT)
 
-class Test(GameObject):
-
+class Level(GameObject):
+    def __init__(self, core, width, height, level_layout=level_layout):
+        super().__init__(core, 0, 0)
+        self.width = width
+        self.height = height
+        self.platform_width = 50
+        self.platforms = []
+        self.enemies = []        
+        
+        self.player = Player(self.core, 100, 300)
+        self.core.add_game_object(self.player)
+        self.core.camera.follow(self.player, offset_x=self.core.width/2, offset_y=200, lerp_factor=0.1)
+        
     def on_start(self):
-        pass
+        for i in range(len(level_layout)):
+            for j in range(len(level_layout[i])):
+                if level_layout[i][j] == "#":
+                    x = j * self.platform_width
+                    y = self.height - (i * self.platform_width)
+                    
+                    platform = Platform(self.core, x, y)
+                    self.platforms.append(platform)
+                    self.core.add_game_object(platform)
 
     def on_update(self, delta_time):
         pass
 
     def on_draw(self):
         Draw.change_color("#FFFFFF")
-        Draw.text("HELLO WORLD", 0, 0, size=20)
 
 
-test = Test(engine, (engine.width / 2) - 100, engine.height / 2)
+# player = Player(engine, 100, 600)
+# enemy = Enemy(engine, 200, 200)
+# floor = Platform(engine, 0, 0)
 
-player = Player(engine, 100, 100)
-enemy = Enemy(engine, 200, 200)
+# engine.add_game_object(player)  
+# engine.add_game_object(enemy)
+level = Level(engine, 700, 500)
+engine.add_game_object(level)
 
-engine.add_game_object(test)
-engine.add_game_object(player)
-engine.add_game_object(enemy)
-
-engine.camera.follow(player, offset_x=100, offset_y=100)
 engine.run()

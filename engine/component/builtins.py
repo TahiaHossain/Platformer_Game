@@ -36,13 +36,18 @@ class ColliderComponent(Component):
         super().__init__(game_object)
         self.width = width
         self.height = height
+        self.game_object.hitbox = self
 
-    def collides_with(self, collider: ColliderComponent):
+        self.top = self.game_object.y
+        self.left = self.game_object.x
+        self.bottom = self.game_object.y - self.height
+        self.right = self.game_object.x + self.width
 
-        if self.game_object.x + self.width < collider.game_object.x \
-                or self.game_object.x > collider.game_object.x + collider.width \
-                or self.game_object.y - self.height < collider.game_object.y \
-                or self.game_object.y > collider.game_object.y + collider.height:
+    def collides_with(self, collider):
+        if self.game_object.x + self.width <= collider.game_object.x \
+                or self.game_object.x >= collider.game_object.x + collider.width \
+                or self.game_object.y - self.height >= collider.game_object.y \
+                or self.game_object.y <= collider.game_object.y - collider.height:
             return False
         else:
             return True
