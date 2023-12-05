@@ -15,9 +15,16 @@ class PicoCore:
     __MOUSE_CLICK_POSITION = (0, 0)
 
     @staticmethod
-    def is_pressed(key: Key):
-        return PicoCore.__KEY_STATES.get(key.value, False)
-
+    def is_pressed(key: Key, hold=True):
+        if hold:
+            return PicoCore.__KEY_STATES.get(key.value, False)
+        else:
+            if PicoCore.__KEY_STATES.get(key.value, False):
+                PicoCore.__KEY_STATES[key.value] = False
+                return True
+            else:
+                return False
+    
     @staticmethod
     def get_click_position():
         return PicoCore.__MOUSE_CLICK_POSITION

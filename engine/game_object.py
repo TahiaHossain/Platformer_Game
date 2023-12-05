@@ -35,9 +35,9 @@ class GameObject(ABC):
             component.start()
 
     def update(self, delta_time):
-        self.on_update(delta_time)
         for component in self.components:
             component.update(delta_time)
+        self.on_update(delta_time)
 
     def draw(self):
         self.on_draw()
