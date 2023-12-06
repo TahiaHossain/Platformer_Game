@@ -30,7 +30,10 @@ class ColliderComponent(Component):
         pass
 
     def update(self, delta_time):
-        pass
+        self.top = self.game_object.y
+        self.left = self.game_object.x
+        self.bottom = self.game_object.y - self.height
+        self.right = self.game_object.x + self.width
 
     def __init__(self, game_object, width: float, height: float):
         super().__init__(game_object)
@@ -38,10 +41,6 @@ class ColliderComponent(Component):
         self.height = height
         self.game_object.hitbox = self
 
-        self.top = self.game_object.y
-        self.left = self.game_object.x
-        self.bottom = self.game_object.y - self.height
-        self.right = self.game_object.x + self.width
 
     def collides_with(self, collider):
         if self.game_object.x + self.width <= collider.game_object.x \
@@ -165,6 +164,8 @@ class PhysicsComponent(Component):
                         self.game_object.y -= height_overlap
                     self.velocity_y = 0
         else:
+            # Rectangle-rectangle collision resolution
+            
             # Calculate the overlap in x and y
             dx = (self.game_object.x + self.collider.width / 2) - (other_object.x + other_collider.width / 2)
             dy = (self.game_object.y + self.collider.height / 2) - (other_object.y + other_collider.height / 2)
