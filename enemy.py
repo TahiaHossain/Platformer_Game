@@ -41,24 +41,24 @@ class EnemyOne(Enemy):
         
     def on_draw(self):
         Draw.change_color("#FF0000")
-        Draw.rect(50, 20, 45, 45)
-        Draw.rect(75, -25, 80, 40)
+        Draw.rect(0, 0, 45, 45)
+        Draw.rect(25, -45, 80, 40)
         # legs
-        Draw.rect(90, -65, 15, 15)
-        Draw.rect(125, -65, 15, 15)
+        Draw.rect(40, -85, 15, 15, True)
+        Draw.rect(75, -85, 15, 15, True)
         # tail
-        Draw.circle(7, 150, -30, thickness=3)
+        Draw.circle(7, 100, -50, True, thickness=3)
         # eyes
-        Draw.rect(57, 10, 10, 10)
-        Draw.rect(75, 10, 10, 10)
+        Draw.rect(7, -10, 10, 10, True)
+        Draw.rect(25, -10, 10, 10, True)
         # mouth
-        Draw.rect(62, -10, 20, 5)
+        Draw.rect(12, -30, 20, 5, True)
         # hair
-        Draw.line(50, 20, 65, 30)
-        Draw.line(60, 20, 75, 30)
-        Draw.line(70, 20, 85, 30)
-        Draw.line(80, 20, 95, 30)
-        Draw.line(90, 20, 105, 30)
+        Draw.line(0, 0, 15, 10)
+        Draw.line(10, 0, 25, 10)
+        Draw.line(20, 0, 35, 10)
+        Draw.line(30, 0, 45, 10)
+        Draw.line(40, 0, 55, 10)
 
 
 class EnemyTwo(Enemy):
@@ -68,24 +68,24 @@ class EnemyTwo(Enemy):
     def on_draw(self):
         # enemy 2
         Draw.change_color("#FF00FF")
-        Draw.rect(212, 20, 45, 45)
-        Draw.rect(220, -25, 30, 40)
+        Draw.rect(12, 0, 45, 45)
+        Draw.rect(20, -45, 30, 40)
         # leg
-        Draw.rect(210, -65, 50, 15)
+        Draw.rect(10, -85, 50, 15, True)
         # eyes
-        Draw.rect(220, 10, 10, 10)
-        Draw.rect(238, 10, 10, 10)
+        Draw.rect(20, -10, 10, 10, True)
+        Draw.rect(38, -10, 10, 10, True)
         # mouth
-        Draw.rect(225, -10, 20, 5)
+        Draw.rect(25, -30, 20, 5, True)
         # hair
-        Draw.line(212, 20, 220, 50)
-        Draw.line(257, 20, 250, 50)
-        Draw.circle(5, 215, 50, False, 3)
-        Draw.circle(5, 245, 50, False, 3)
-        Draw.line(225, 20, 230, 40)
-        Draw.line(245, 20, 240, 40)
-        Draw.circle(3, 227, 40, False, 3)
-        Draw.circle(3, 237, 40, False, 3)
+        Draw.line(12, 0, 20, 30)
+        Draw.line(57, 0, 50, 30)
+        Draw.circle(5, 15, 30, True, 3)
+        Draw.circle(5, 45, 30, True, 3)
+        Draw.line(25, 0, 30, 20)
+        Draw.line(45, 0, 40, 20)
+        Draw.circle(3, 27, 20, True, 3)
+        Draw.circle(3, 37, 20, True, 3)
 
 
 class EnemyThree(Enemy):
@@ -95,21 +95,21 @@ class EnemyThree(Enemy):
     def on_draw(self):
         # enemy 3
         Draw.change_color("#00FFFF")
-        Draw.rect(312, 20, 45, 45)
-        Draw.rect(320, -25, 30, 40)
+        Draw.rect(12, 0, 45, 45)
+        Draw.rect(20, -45, 30, 40)
         # leg
-        Draw.rect(310, -65, 50, 15)
+        Draw.rect(10, -85, 50, 15, True)
         # eyes
-        Draw.rect(320, 10, 10, 10)
-        Draw.rect(338, 10, 10, 10)
+        Draw.rect(20, -10, 10, 10, True)
+        Draw.rect(38, -10, 10, 10, True)
         # mouth
-        Draw.rect(325, -10, 20, 5)
+        Draw.rect(25, -30, 20, 5, True)
         # hair
-        Draw.line(312, 20, 318, 50)
-        Draw.line(323, 20, 318, 50)
-        Draw.line(323, 20, 330, 50)
-        Draw.line(335, 20, 330, 50)
-        Draw.line(335, 20, 342, 50)
-        Draw.line(347, 20, 342, 50)
-        Draw.line(347, 20, 353, 50)
-        Draw.line(357, 20, 353, 50)
+        Draw.line(12, 0, 18, 30)
+        Draw.line(23, 0, 18, 30)
+        Draw.line(23, 0, 30, 30)
+        Draw.line(35, 0, 30, 30)
+        Draw.line(35, 0, 42, 30)
+        Draw.line(47, 0, 42, 30)
+        Draw.line(47, 0, 53, 30)
+        Draw.line(57, 0, 53, 30)
