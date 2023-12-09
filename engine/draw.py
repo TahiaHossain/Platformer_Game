@@ -98,7 +98,7 @@ class Draw:
                 d = d + incE
 
     @staticmethod
-    def circle(r, cx, cy, fill=False):
+    def circle(r, cx, cy, fill=False, thickness=1):
         d = 1 - r
         x = 0
         y = r
@@ -113,14 +113,14 @@ class Draw:
                 y -= 1
 
             if not fill:
-                Draw.point(cx + y + r, cy + x + r)  # Zone 0
-                Draw.point(cx + x + r, cy + y + r)  # Zone 1
-                Draw.point(cx - x + r, cy + y + r)  # Zone 2
-                Draw.point(cx - y + r, cy + x + r)  # Zone 3
-                Draw.point(cx - y + r, cy - x + r)  # Zone 4
-                Draw.point(cx - x + r, cy - y + r)  # Zone 5
-                Draw.point(cx + x + r, cy - y + r)  # Zone 6
-                Draw.point(cx + y + r, cy - x + r)  # Zone 7
+                Draw.point(cx + y + r, cy + x + r, thickness)  # Zone 0
+                Draw.point(cx + x + r, cy + y + r, thickness)  # Zone 1
+                Draw.point(cx - x + r, cy + y + r, thickness)  # Zone 2
+                Draw.point(cx - y + r, cy + x + r, thickness)  # Zone 3
+                Draw.point(cx - y + r, cy - x + r, thickness)  # Zone 4
+                Draw.point(cx - x + r, cy - y + r, thickness)  # Zone 5
+                Draw.point(cx + x + r, cy - y + r, thickness)  # Zone 6
+                Draw.point(cx + y + r, cy - x + r, thickness)  # Zone 7
             else:
                 Draw.line(cx - x + r, cy + y + r, cx + x + r, cy + y + r)  # Zone 1 and 2
                 Draw.line(cx - y + r, cy + x + r, cx + y + r, cy + x + r)  # Zone 0 and 3

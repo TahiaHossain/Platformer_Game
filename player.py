@@ -4,7 +4,6 @@ from engine.game_object import GameObject
 from engine.input import Keys
 from engine.picocore import PicoCore
 from _platform import Platform
-from floor import Floor
 
 
 class Player(GameObject):
@@ -57,9 +56,9 @@ class Player(GameObject):
 
     def on_draw(self):
         Draw.change_color("#ffc0cb")
-        Draw.circle(25, -12, -20)
-        Draw.circle(25, -12, -20)
-        Draw.circle(25, -12, -20)
+        Draw.circle(25, -12, -20, False, 3)
+        Draw.circle(25, -12, -20, False, 3)
+        Draw.circle(25, -12, -20, False, 3)
 
         Draw.line(8, -20, -22, -60)
         Draw.line(18, -20, 48, -60)
@@ -81,7 +80,7 @@ class Player(GameObject):
         # tail
         Draw.line(-12, -45, -30, -40)
         # nose
-        Draw.circle(5, 8, -10, fill=True)
+        Draw.circle(5, 8, -10, 3)
         # legs
-        Draw.circle(10, -12, -77, fill=True)
-        Draw.circle(10, 17, -77, fill=True)
+        Draw.circle(10, -12, -77,False, 3)
+        Draw.circle(10, 17, -77, False,3)

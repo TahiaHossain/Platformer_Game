@@ -16,7 +16,7 @@ class Platform(GameObject):
         self.bottom = y - height
         
     def on_start(self):
-        self.add_component(PhysicsComponent(self))
+        # self.add_component(PhysicsComponent(self))
         self.add_component(ColliderComponent(self, self.width, self.height))
         
     def on_update(self, delta_time):
