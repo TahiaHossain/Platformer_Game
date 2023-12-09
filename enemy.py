@@ -1,6 +1,20 @@
 from engine.draw import Draw
 from engine.game_object import GameObject
 
+class Enemy(GameObject):
+    def __init__(self, core, x, y, height=80, width=20):
+        super().__init__(core, x, y)
+        self.height = height
+        self.width = width
+
+    def on_start(self):
+        pass
+
+    def on_update(self, delta_time):
+        pass
+
+    def on_draw(self):
+        pass
 
 class EnemyOne(GameObject):
 

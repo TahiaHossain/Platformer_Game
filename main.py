@@ -3,7 +3,7 @@ from engine.game_object import GameObject
 from engine.picocore import PicoCore
 from player import Player
 from _platform import Platform
-from enemy import Enemy
+from enemy import *
 from floor import Floor
 
 level_layout = [
@@ -14,7 +14,7 @@ level_layout = [
     "           ####     #####",
     "",
     "",
-    "",
+    "e",
     "###############    ####"
     ]
 PLATFORM_SIZE = 50
@@ -46,6 +46,13 @@ class Level(GameObject):
                     platform = Platform(self.core, x, y)
                     self.platforms.append(platform)
                     self.core.add_game_object(platform)
+                elif level_layout[i][j] == "e":
+                    x = j * self.platform_width
+                    y = self.height - (i * self.platform_width)
+                    
+                    enemy = EnemyOne(self.core, x, y)
+                    self.enemies.append(enemy)
+                    self.core.add_game_object(enemy)
 
     def on_update(self, delta_time):
         pass

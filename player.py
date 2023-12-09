@@ -26,8 +26,8 @@ class Player(GameObject):
 
     def on_start(self):
         self.add_component(PhysicsComponent(self))
-        # self.add_component(RigidBodyComponent(self, gravity=2000))
-        self.add_component(ColliderComponent(self, 20, 80))
+        self.add_component(RigidBodyComponent(self, gravity=2000))
+        self.add_component(ColliderComponent(self, self.width, self.height))
 
     def on_update(self, delta_time):
         self.top = self.y
