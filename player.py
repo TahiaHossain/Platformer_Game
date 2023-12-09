@@ -11,6 +11,7 @@ class Player(GameObject):
 
     def __init__(self, core, x, y, width=30, height=80, debug=False):
         super().__init__(core, x, y, width, height, debug=debug)
+
         self.height = height
         self.width = width
         self.jump_counter = 0
@@ -28,6 +29,7 @@ class Player(GameObject):
         self.add_component(PhysicsComponent(self))
         self.add_component(RigidBodyComponent(self, gravity=2000))
         self.add_component(ColliderComponent(self, self.width, self.height))
+
 
     def on_update(self, delta_time):
         physics_component: PhysicsComponent = self.get_component(PhysicsComponent)
@@ -79,3 +81,4 @@ class Player(GameObject):
         # legs
         Draw.circle(10, -12, -77, fill=False)
         Draw.circle(10, 17, -77, fill=False)
+
