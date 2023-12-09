@@ -2,7 +2,9 @@ from __future__ import annotations
 import math
 
 from engine.component.component import Component
+from engine.draw import Draw
 from engine.game_object import GameObject
+from engine.picocore import PicoCore
 
 
 class CircularMotionComponent(Component):
@@ -26,21 +28,18 @@ class CircularMotionComponent(Component):
 
 
 class ColliderComponent(Component):
+
+    def __init__(self, game_object, width: float, height: float, static: bool = False):
+        super().__init__(game_object)
+        self.width = width
+        self.height = height
+        self.static = static
+
     def start(self):
         pass
 
     def update(self, delta_time):
-        self.top = self.game_object.y
-        self.left = self.game_object.x
-        self.bottom = self.game_object.y - self.height
-        self.right = self.game_object.x + self.width
-
-    def __init__(self, game_object, width: float, height: float):
-        super().__init__(game_object)
-        self.width = width
-        self.height = height
-        self.game_object.hitbox = self
-
+        pass
 
     def collides_with(self, collider):
         if self.game_object.x + self.width <= collider.game_object.x \
@@ -116,15 +115,14 @@ class PhysicsComponent(Component):
             self.handle_collisions()
 
     def handle_collisions(self):
-        # Here you can check for collisions with other game objects, e.g., floors or walls
-        for other_object in self.game_object.core.game_objects:
+        for other_object in PicoCore.get_scene_manager().get_current_scene().game_objects:
             if other_object == self.game_object:
                 continue
 
             other_collider = other_object.get_component(ColliderComponent)
 
             if self.collider is not None and other_collider is not None and self.collider.collides_with(other_collider):
-                # self.resolve_collision(other_object)
+                self.resolve_collision(other_object)
                 if other_object not in self.collisions:
                     self.collisions.append(other_object)
             else:
@@ -132,60 +130,39 @@ class PhysicsComponent(Component):
                     self.collisions.remove(other_object)
 
     def resolve_collision(self, other_object):
+        if self.collider.static:
+            return
         # Prevent the game object from falling through the floor
         other_collider = other_object.get_component(ColliderComponent)
 
-        if isinstance(self.collider, CircularColliderComponent) and isinstance(other_collider,
-                                                                               CircularColliderComponent):
-            # Circle-circle collision resolution
-            # (not handling this case for now)
-            pass
-        elif isinstance(self.collider, CircularColliderComponent):
-            # Circle-rectangle collision resolution
-            dx = self.game_object.x - (other_object.x + other_collider.width / 2)
-            dy = self.game_object.y - (other_object.y + other_collider.height / 2)
-            half_width_sum = (self.collider.width + other_collider.width) / 2
-            half_height_sum = (self.collider.height + other_collider.height) / 2
+        dx = (self.game_object.x + self.collider.width / 2) - (other_object.x + other_collider.width / 2)
+        dy = (self.game_object.y + self.collider.height / 2) - (other_object.y + other_collider.height / 2)
 
-            if abs(dx) <= half_width_sum and abs(dy) <= half_height_sum:
-                width_overlap = half_width_sum - abs(dx)
-                height_overlap = half_height_sum - abs(dy)
+        width_overlap = (self.collider.width + other_collider.width) / 2 - abs(dx)
+        height_overlap = (self.collider.height + other_collider.height) / 2 - abs(dy)
 
-                if width_overlap < height_overlap:
-                    if dx > 0:
-                        self.game_object.x += width_overlap
-                    else:
-                        self.game_object.x -= width_overlap
-                    self.velocity_x *= -1
-                else:
-                    if dy > 0:
-                        self.game_object.y += height_overlap
-                    else:
-                        self.game_object.y -= height_overlap
-                    self.velocity_y = 0
-        else:
-            # Rectangle-rectangle collision resolution
-            
-            # Calculate the overlap in x and y
-            dx = (self.game_object.x + self.collider.width / 2) - (other_object.x + other_collider.width / 2)
-            dy = (self.game_object.y + self.collider.height / 2) - (other_object.y + other_collider.height / 2)
+        # Determine the side of the collision and resolve it
+        if width_overlap < height_overlap:
+            # Horizontal collision
+            if dx > 0:
+                self.game_object.x += width_overlap
+                self.velocity_x = 0  # Stop horizontal movement
 
-            width_overlap = (self.collider.width + other_collider.width) / 2 - abs(dx)
-            height_overlap = (self.collider.height + other_collider.height) / 2 - abs(dy)
-
-            # Determine the side of the collision and resolve it
-            if width_overlap < height_overlap:
-                if dx > 0:
-                    self.game_object.x += width_overlap
-                else:
-                    self.game_object.x -= width_overlap
             else:
-                if dy > 0:
-                    self.game_object.y += height_overlap
-                    self.velocity_y = 0
-                else:
-                    self.game_object.y -= height_overlap
-                    self.velocity_y = 0
+                self.game_object.x -= width_overlap
+                self.velocity_x = 0  # Stop horizontal movement
+
+        else:
+            # Vertical collision
+            if dy > 0:
+                # From top
+                self.game_object.y = other_object.y + self.collider.height
+                self.velocity_y = 0
+            else:
+                # From bottom
+                # self.game_object.y -= height_overlap
+                self.game_object.y = other_object.y - self.collider.height
+                self.velocity_y = 0  # Stop vertical movement
 
 
 class RigidBodyComponent(Component):
@@ -202,6 +179,5 @@ class RigidBodyComponent(Component):
         pass
 
     def update(self, delta_time):
-        # Apply gravity to the object
         delta_time_seconds = delta_time / 1000
         self.physics_component.velocity_y -= self.gravity * delta_time_seconds

@@ -5,11 +5,11 @@ from engine.input import Keys
 from engine.picocore import PicoCore
 from _platform import Platform
 
-
 class Player(GameObject):
+    
+    def __init__(self, core, x, y, width=30, height=80, debug=False):
+        super().__init__(core, x, y, width, height, debug=debug)
 
-    def __init__(self, core, x, y, height=80, width=30):
-        super().__init__(core, x, y)
         self.height = height
         self.width = width
         self.jump_counter = 0
@@ -20,8 +20,8 @@ class Player(GameObject):
 
     def jump(self, physics_component: PhysicsComponent, delta_time):
         self.jump_counter += 1
-        if self.abilities["double_jump"] and self.jump_counter < 1000:
-            physics_component.velocity_y += 70 * delta_time
+        if self.abilities["double_jump"] and self.jump_counter < 3:
+            physics_component.velocity_y += 50 * delta_time
 
     def on_start(self):
         self.add_component(PhysicsComponent(self))
@@ -30,29 +30,23 @@ class Player(GameObject):
 
 
     def on_update(self, delta_time):
-        self.top = self.y
-        self.left = self.x
-        self.right = self.x + self.width
-        self.bottom = self.y - self.height
-
         physics_component: PhysicsComponent = self.get_component(PhysicsComponent)
         collider_component: ColliderComponent = self.get_component(ColliderComponent)
 
         if physics_component is not None:
+
+            if len(physics_component.collisions) > 0 and collider_component is not None:
+                collided_with = physics_component.collisions[0]
+
+                if isinstance(collided_with, Platform):
+                    self.jump_counter = 0
+
             if PicoCore.is_pressed(Keys.d):
                 physics_component.velocity_x += 1 * delta_time
             elif PicoCore.is_pressed(Keys.a):
                 physics_component.velocity_x -= 1 * delta_time
             if PicoCore.is_pressed(Keys.SPACE, hold=False):
                 self.jump(physics_component, delta_time)
-
-            if len(physics_component.collisions) > 0 and collider_component is not None:
-                collided_with = physics_component.collisions[0]
-                other_collider = collided_with.get_component(ColliderComponent)
-
-                if isinstance(collided_with, Platform):
-                    self.jump_counter = 0
-                    self.y = collided_with.top + self.height
 
     def on_draw(self):
         Draw.change_color("#ffc0cb")

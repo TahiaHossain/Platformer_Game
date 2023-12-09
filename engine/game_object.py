@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+
 from engine.component.component import Component
+from engine.draw import Draw
 
 
 class GameObject(ABC):
-    def __init__(self, core, x=0, y=0, scale=1.0, rotation=0.0):
+    def __init__(self, core, x, y, width, height, scale=1.0, rotation=0.0, debug=False):
         self.x = x
         self.y = y
         self.scale = scale
@@ -16,6 +18,14 @@ class GameObject(ABC):
         self.components = []
         self.started = False
         self.to_remove = False
+        self.debug = debug
+
+        self.width = width
+        self.height = height
+        self.top = self.y
+        self.left = self.x
+        self.right = self.x + self.width
+        self.bottom = self.y - self.height
 
     @abstractmethod
     def on_start(self):
@@ -35,12 +45,20 @@ class GameObject(ABC):
             component.start()
 
     def update(self, delta_time):
+        self.top = self.y
+        self.left = self.x
+        self.right = self.x + self.width
+        self.bottom = self.y - self.height
+
         for component in self.components:
             component.update(delta_time)
         self.on_update(delta_time)
 
     def draw(self):
         self.on_draw()
+        if self.debug:
+            Draw.change_color("#FF0000")
+            Draw.rect(0, 0, self.width, self.height)
 
     def add_child(self, child: GameObject):
         if child.parent is not None:
