@@ -27,24 +27,24 @@ class EnemyOne(GameObject):
     def on_draw(self):
         # enemy 1
         Draw.change_color("#FF0000")
-        Draw.rect(75, 20, 45, 45)
-        Draw.rect(100, -25, 80, 40)
+        Draw.rect(50, 20, 45, 45)
+        Draw.rect(75, -25, 80, 40)
         # legs
-        Draw.rect(115, -65, 15, 15)
-        Draw.rect(150, -65, 15, 15)
+        Draw.rect(90, -65, 15, 15, fill=True)
+        Draw.rect(125, -65, 15, 15, fill=True)
         # tail
-        Draw.circle(7, 175, -30)
+        Draw.circle(7, 150, -30, fill=True)
         # eyes
-        Draw.rect(82, 10, 10, 10)
-        Draw.rect(100, 10, 10, 10)
+        Draw.rect(57, 10, 10, 10, fill=True)
+        Draw.rect(75, 10, 10, 10, fill=True)
         # mouth
-        Draw.rect(87, -10, 20, 5)
+        Draw.rect(62, -10, 20, 5, fill=True)
         # hair
-        Draw.line(75, 20, 90, 30)
-        Draw.line(85, 20, 100, 30)
-        Draw.line(95, 20, 110, 30)
-        Draw.line(105, 20, 120, 30)
-        Draw.line(115, 20, 130, 30)
+        Draw.line(50, 20, 65, 30)
+        Draw.line(60, 20, 75, 30)
+        Draw.line(70, 20, 85, 30)
+        Draw.line(80, 20, 95, 30)
+        Draw.line(90, 20, 105, 30)
 
 
 class EnemyTwo(GameObject):
@@ -61,12 +61,12 @@ class EnemyTwo(GameObject):
         Draw.rect(212, 20, 45, 45)
         Draw.rect(220, -25, 30, 40)
         # leg
-        Draw.rect(210, -65, 50, 15)
+        Draw.rect(210, -65, 50, 15, fill=True)
         # eyes
-        Draw.rect(220, 10, 10, 10)
-        Draw.rect(238, 10, 10, 10)
+        Draw.rect(220, 10, 10, 10, fill=True)
+        Draw.rect(238, 10, 10, 10, fill=True)
         # mouth
-        Draw.rect(225, -10, 20, 5)
+        Draw.rect(225, -10, 20, 5, fill=True)
         # hair
         Draw.line(212, 20, 220, 50)
         Draw.line(257, 20, 250, 50)
@@ -92,12 +92,12 @@ class EnemyThree(GameObject):
         Draw.rect(312, 20, 45, 45)
         Draw.rect(320, -25, 30, 40)
         # leg
-        Draw.rect(310, -65, 50, 15)
+        Draw.rect(310, -65, 50, 15, fill=True)
         # eyes
-        Draw.rect(320, 10, 10, 10)
-        Draw.rect(338, 10, 10, 10)
+        Draw.rect(320, 10, 10, 10, fill=True)
+        Draw.rect(338, 10, 10, 10, fill=True)
         # mouth
-        Draw.rect(325, -10, 20, 5)
+        Draw.rect(325, -10, 20, 5, fill=True)
         # hair
         Draw.line(312, 20, 318, 50)
         Draw.line(323, 20, 318, 50)
