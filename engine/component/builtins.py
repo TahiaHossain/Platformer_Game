@@ -42,10 +42,10 @@ class ColliderComponent(Component):
         pass
 
     def collides_with(self, collider):
-        if self.game_object.x + self.width <= collider.game_object.x \
-                or self.game_object.x >= collider.game_object.x + collider.width \
-                or self.game_object.y - self.height >= collider.game_object.y \
-                or self.game_object.y <= collider.game_object.y - collider.height:
+        if self.game_object.x + self.width < collider.game_object.x \
+                or self.game_object.x > collider.game_object.x + collider.width \
+                or self.game_object.y - self.height > collider.game_object.y \
+                or self.game_object.y < collider.game_object.y - collider.height:
             return False
         else:
             return True
@@ -179,5 +179,7 @@ class RigidBodyComponent(Component):
         pass
 
     def update(self, delta_time):
+        if not self.enabled:
+            return
         delta_time_seconds = delta_time / 1000
         self.physics_component.velocity_y -= self.gravity * delta_time_seconds
