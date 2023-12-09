@@ -3,7 +3,7 @@ from engine.draw import Draw
 from engine.game_object import GameObject
 from engine.input import Keys
 from engine.picocore import PicoCore
-from _platform import Platform
+from block import Block
 
 class Player(GameObject):
     
@@ -38,7 +38,7 @@ class Player(GameObject):
             if len(physics_component.collisions) > 0 and collider_component is not None:
                 collided_with = physics_component.collisions[0]
 
-                if isinstance(collided_with, Platform):
+                if isinstance(collided_with, Block):
                     self.jump_counter = 0
 
             if PicoCore.is_pressed(Keys.d):

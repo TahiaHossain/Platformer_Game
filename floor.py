@@ -1,8 +1,8 @@
-from platform import Platform
+from block import Block
 from engine.draw import Draw
 
 
-class Floor(Platform):
+class Floor(Block):
     def __init__(self, core, x, y):
         super().__init__(core, x, y)
         self.width = core.width
