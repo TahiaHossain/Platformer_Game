@@ -7,7 +7,7 @@ from OpenGL.raw.GLU import gluOrtho2D
 from engine.camera import Camera
 from engine.scene.scene_manager import SceneManager
 from engine.draw import Draw
-from engine.game_object import GameObject
+from engine.game_object import GameObject, UiObject
 from engine.input import Key, Keys
 
 
@@ -67,6 +67,14 @@ class PicoCore:
 
             glPopMatrix()
 
+        def draw_ui(ui_object):
+            glPushMatrix()
+            glTranslatef(ui_object.x, ui_object.y, 0)
+            glRotatef(ui_object.rotation, 0, 0, 1)
+            glScalef(ui_object.scale, ui_object.scale, 1)
+            ui_object.draw()
+            glPopMatrix()
+
         glClear(GL_COLOR_BUFFER_BIT)
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()
@@ -74,7 +82,7 @@ class PicoCore:
         scene = PicoCore.get_scene_manager().get_current_scene()
 
         for ui_object in scene.ui_objects:
-            draw_recursive(ui_object)
+            draw_ui(ui_object)
 
         glScalef(scene.camera.zoom, scene.camera.zoom, 1)
         glTranslatef(-scene.camera.position[0], -scene.camera.position[1], 0)
@@ -107,12 +115,18 @@ class PicoCore:
                 for child in game_object.children:
                     update_recursive(child)
 
+            def update_ui(ui_object: UiObject):
+                if not ui_object.started:
+                    ui_object.start()
+                    ui_object.started = True
+                ui_object.update(delta_time)
+
             for ui_object in scene.ui_objects:
-                update_recursive(ui_object)
+                update_ui(ui_object)
 
             for ui_object in scene.ui_objects:
                 if ui_object.to_remove:
-                    scene.remove_game_object(ui_object)
+                    scene.remove_ui_object(ui_object)
 
             if not scene.paused:
                 for game_object in scene.game_objects:
