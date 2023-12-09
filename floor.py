@@ -1,9 +1,5 @@
-from engine.component.builtins import ColliderComponent
+from platform import Platform
 from engine.draw import Draw
-from engine.game_object import GameObject
-from engine.input import Keys
-from engine.picocore import PicoCore
-from _platform import Platform
 
 
 class Floor(Platform):

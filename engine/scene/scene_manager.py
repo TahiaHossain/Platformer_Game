@@ -1,13 +1,12 @@
 from typing import Optional
 
-from engine.component.scene.scene import Scene
+from engine.scene.scene import Scene
 from engine.utils import get_key_by_value
 
 
 class SceneManager:
 
-    def __init__(self, engine):
-        self.engine = engine
+    def __init__(self):
         self.scenes = {}
         self.current_scene: Optional[Scene] = None
 
