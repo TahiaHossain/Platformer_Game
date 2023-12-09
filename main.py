@@ -3,7 +3,6 @@ from engine.picocore import PicoCore
 from level import get_level_scene
 from main_menu import get_main_menu
 
-
 PLATFORM_SIZE = 50
 WIDTH = 700
 HEIGHT = 500

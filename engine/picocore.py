@@ -161,7 +161,7 @@ class PicoCore:
         glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_MULTISAMPLE)
         glutInitWindowSize(self.width, self.height)
         glutInitWindowPosition(100, 100)
-        glutCreateWindow(self.title)
+        glutCreateWindow(bytes(self.title, "utf-8"))
 
         glClearColor(0.0, 0.0, 0.0, 0.0)
         glMatrixMode(GL_PROJECTION)
