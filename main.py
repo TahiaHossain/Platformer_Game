@@ -3,7 +3,7 @@ from engine.game_object import GameObject
 from engine.picocore import PicoCore
 from player import Player
 from _platform import Platform
-from enemy import Enemy
+from enemy import *
 from floor import Floor
 
 level_layout = [
@@ -32,7 +32,7 @@ class Level(GameObject):
         self.platforms = []
         self.enemies = []        
         
-        self.player = Player(self.core, 100, 300)
+        self.player = Player(self.core, 200, 200)
         self.core.add_game_object(self.player)
         self.core.camera.follow(self.player, offset_x=self.core.width/2, offset_y=200, lerp_factor=0.1)
         
