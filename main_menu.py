@@ -29,6 +29,6 @@ def get_main_menu(engine: PicoCore) -> Scene:
 
     main_menu.add_game_object(
         Label(engine, "PLATFORMER", (engine.width / 2), (engine.height / 2) + 100, alignment="center"))
-    main_menu.add_game_object(PlayOption(engine, (engine.width / 2) - 50, engine.height / 2))
+    main_menu.add_ui_object(PlayOption(engine, (engine.width / 2) - 50, engine.height / 2))
 
     return main_menu

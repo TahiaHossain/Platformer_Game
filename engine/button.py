@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
 
-from engine.game_object import GameObject
+from engine.game_object import GameObject, UiObject
 from engine.input import Keys
 from engine.picocore import PicoCore
 
 
-class Button(GameObject, ABC):
+class Button(UiObject, ABC):
 
     def __init__(self, core, x, y, width, height):
         super().__init__(core, x, y, width, height)
