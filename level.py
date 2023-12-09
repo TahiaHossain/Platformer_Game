@@ -33,7 +33,7 @@ class PlayPauseButton(Button):
 def get_level_scene(engine: PicoCore) -> Scene:
     level = Scene(engine)
 
-    player = Player(engine, 100, 500, debug=False)
+    player = Player(engine, 100, 500, debug=True)
     enemy = EnemyOne(engine, 200, 200, 100, 100)
 
     play_pause_button = PlayPauseButton(engine, engine.width / 2, engine.height - 50)
@@ -45,7 +45,7 @@ def get_level_scene(engine: PicoCore) -> Scene:
         falling = bool(getrandbits(1))
         level.add_game_object(Block(engine, (i * 300) + x_space, y_space, width=200, height=50, falling=falling))
         if i % 4 == 0:
-            enemy = choice((enemy_types))(engine, (i * 200) + x_space, y_space + 50, 100, 100)
+            enemy = choice((enemy_types))(engine, (i * 200) + x_space, y_space + 50, 100, 100, debug=True)
             level.add_game_object(enemy)
 
     level.add_ui_object(play_pause_button)

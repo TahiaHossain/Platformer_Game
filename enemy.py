@@ -2,7 +2,7 @@ from engine.component.builtins import RigidBodyComponent, PhysicsComponent, Coll
 from engine.draw import Draw
 from engine.game_object import GameObject
 from engine.picocore import PicoCore
-from _platform import Platform
+from block import Block
 
 class Enemy(GameObject):
     def __init__(self, core, x, y, height=80, width=20, debug=False):
@@ -29,7 +29,7 @@ class Enemy(GameObject):
                 collided_with = physics_component.collisions[0]
                 other_collider = collided_with.get_component(ColliderComponent)
 
-                if isinstance(collided_with, Platform):
+                if isinstance(collided_with, Block):
                     self.y = collided_with.top + self.height
 
     def on_draw(self):
@@ -62,8 +62,8 @@ class EnemyOne(Enemy):
 
 
 class EnemyTwo(Enemy):
-    def __init__(self, core, x, y, height=80, width=20):
-        super().__init__(core, x, y)
+    def __init__(self, core, x, y, height=80, width=20, debug=False):
+        super().__init__(core, x, y, width, height, debug=debug)
         
     def on_draw(self):
         # enemy 2
@@ -89,8 +89,8 @@ class EnemyTwo(Enemy):
 
 
 class EnemyThree(Enemy):
-    def __init__(self, core, x, y, height=80, width=20):
-        super().__init__(core, x, y)
+    def __init__(self, core, x, y, height=80, width=20, debug=False):
+        super().__init__(core, x, y, width, height, debug=debug)
             
     def on_draw(self):
         # enemy 3
