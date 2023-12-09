@@ -1,66 +1,107 @@
+from abc import ABC, abstractmethod
+from enemy import EnemyOne
+from engine.component.scene.scene import Scene
 from engine.draw import Draw
 from engine.game_object import GameObject
+from engine.input import Keys
 from engine.picocore import PicoCore
 from player import Player
-from _platform import Platform
-from enemy import Enemy
-from floor import Floor
 
-level_layout = [
-    "",
-    "",
-    "",
-    "#####",
-    "           ####     #####",
-    "",
-    "",
-    "",
-    "###############    ####"
-    ]
 PLATFORM_SIZE = 50
 WIDTH = 700
-HEIGHT = len(level_layout) * PLATFORM_SIZE
+HEIGHT = 500
 
 engine = PicoCore("Platformer", WIDTH, HEIGHT)
 
-class Level(GameObject):
-    def __init__(self, core, width, height, level_layout=level_layout):
-        super().__init__(core, 0, 0)
-        self.width = width
-        self.height = height
-        self.platform_width = 50
-        self.platforms = []
-        self.enemies = []        
-        
-        self.player = Player(self.core, 100, 300)
-        self.core.add_game_object(self.player)
-        self.core.camera.follow(self.player, offset_x=self.core.width/2, offset_y=200, lerp_factor=0.1)
-        
-    def on_start(self):
-        for i in range(len(level_layout)):
-            for j in range(len(level_layout[i])):
-                if level_layout[i][j] == "#":
-                    x = j * self.platform_width
-                    y = self.height - (i * self.platform_width)
-                    
-                    platform = Platform(self.core, x, y)
-                    self.platforms.append(platform)
-                    self.core.add_game_object(platform)
+player = Player(engine, 100, 500)
+enemy = EnemyOne(engine, 200, 200)
 
-    def on_update(self, delta_time):
+level_one = Scene(engine)
+
+level_one.add_game_object(player)
+level_one.add_game_object(enemy)
+level_one.camera.follow(player, 100, 100)
+
+engine.get_scene_manager().add_scene("level_one", level_one)
+
+main_menu = Scene(engine)
+
+
+class PlayButton(GameObject):
+
+    def __init__(self, core, x, y):
+        super().__init__(core, x, y)
+        self.processing_click = False
+        self.processing_clock = 0
+
+    def on_start(self):
         pass
 
+    def on_update(self, delta_time):
+
+        if PicoCore.is_pressed(Keys.LMB) and not self.processing_click:
+            self.processing_click = True
+            position = PicoCore.get_click_position()
+
+            if self.x < position[0] < self.x + 25 \
+                    and self.y > position[1] > self.y - 25:
+                self.core.get_scene_manager().set_current_scene("level_one")
+
+        if self.processing_click:
+            self.processing_clock += delta_time
+
+        if self.processing_clock >= 500:
+            self.processing_click = False
+            self.processing_clock = 0
+
     def on_draw(self):
-        Draw.change_color("#FFFFFF")
+        Draw.change_color("#F0DA20")
+        Draw.line(0, 0, 0, -25, width=2)
+        Draw.line(0, 0, 20, -12, width=2)
+        Draw.line(0, -25, 20, -12, width=2)
 
 
-# player = Player(engine, 100, 600)
-# enemy = Enemy(engine, 200, 200)
-# floor = Platform(engine, 0, 0)
+class Button(GameObject, ABC):
 
-# engine.add_game_object(player)  
-# engine.add_game_object(enemy)
-level = Level(engine, 700, 500)
-engine.add_game_object(level)
+    def __init__(self, core, x, y, width, height):
+        super().__init__(core, x, y)
+        self.width = width
+        self.height = height
+        self.processing_click = False
+        self.processing_clock = 0
+
+    def on_start(self):
+        pass
+
+    def on_update(self, delta_time):
+
+        if PicoCore.is_pressed(Keys.LMB) and not self.processing_click:
+            self.processing_click = True
+            position = PicoCore.get_click_position()
+
+            if self.x < position[0] < self.x + 25 \
+                    and self.y > position[1] > self.y - 25:
+                self.core.get_scene_manager().set_current_scene("level_one")
+
+        if self.processing_click:
+            self.processing_clock += delta_time
+
+        if self.processing_clock >= 500:
+            self.processing_click = False
+            self.processing_clock = 0
+
+    @abstractmethod
+    def on_draw(self):
+        pass
+
+
+
+
+
+
+
+main_menu.add_game_object(PlayButton(engine, WIDTH / 2, HEIGHT / 2))
+
+engine.get_scene_manager().add_scene("menu", main_menu, set_current=True)
 
 engine.run()

@@ -5,6 +5,7 @@ from OpenGL.GLUT import *
 from OpenGL.raw.GLU import gluOrtho2D
 
 from engine.camera import Camera
+from engine.component.scene.scene_manager import SceneManager
 from engine.draw import Draw
 from engine.game_object import GameObject
 from engine.input import Key, Keys
@@ -24,7 +25,7 @@ class PicoCore:
                 return True
             else:
                 return False
-    
+
     @staticmethod
     def get_click_position():
         return PicoCore.__MOUSE_CLICK_POSITION
@@ -39,6 +40,10 @@ class PicoCore:
         zoom = 1.0  # Set the initial zoom level
         self.camera = Camera(position, zoom)
         self.game_over = False
+        self.scene_manager = SceneManager(self)
+
+    def get_scene_manager(self):
+        return self.scene_manager
 
     def add_game_object(self, game_object: GameObject):
         self.game_objects.append(game_object)
@@ -52,8 +57,10 @@ class PicoCore:
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()
 
-        glScalef(self.camera.zoom, self.camera.zoom, 1)
-        glTranslatef(-self.camera.position[0], -self.camera.position[1], 0)
+        scene = self.scene_manager.get_current_scene()
+
+        glScalef(scene.camera.zoom, scene.camera.zoom, 1)
+        glTranslatef(-scene.camera.position[0], -scene.camera.position[1], 0)
 
         def draw_recursive(game_object):
             glPushMatrix()
@@ -67,7 +74,7 @@ class PicoCore:
 
             glPopMatrix()
 
-        for game_object in self.game_objects:
+        for game_object in scene.game_objects:
             draw_recursive(game_object)
 
         if self.game_over:
@@ -77,14 +84,14 @@ class PicoCore:
 
         glutSwapBuffers()
 
-
     def __update(self, value):
         if not self.game_over:
             current_frame_time = time.time()
             delta_time = (current_frame_time - self.last_frame_time) * 1000  # Convert to milliseconds
             self.last_frame_time = current_frame_time
 
-            self.camera.update(delta_time)
+            scene = self.scene_manager.get_current_scene()
+            scene.camera.update(delta_time)
 
             def update_recursive(game_object: GameObject):
                 if not game_object.started:
@@ -95,12 +102,12 @@ class PicoCore:
                 for child in game_object.children:
                     update_recursive(child)
 
-            for game_object in self.game_objects:
+            for game_object in scene.game_objects:
                 update_recursive(game_object)
 
-            for game_object in self.game_objects:
+            for game_object in scene.game_objects:
                 if game_object.to_remove:
-                    self.remove_game_object(game_object)
+                    scene.remove_game_object(game_object)
 
         glutPostRedisplay()
         glutTimerFunc(16, self.__update, 0)
