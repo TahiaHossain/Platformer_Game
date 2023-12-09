@@ -33,7 +33,9 @@ class Level(GameObject):
         self.enemies = []        
         
         self.player = Player(self.core, 200, 200)
+        self.enemy = EnemyOne(self.core, 200, 180)
         self.core.add_game_object(self.player)
+        self.core.add_game_object(self.enemy)
         self.core.camera.follow(self.player, offset_x=self.core.width/2, offset_y=200, lerp_factor=0.1)
         
     def on_start(self):
