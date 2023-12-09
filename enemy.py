@@ -12,4 +12,4 @@ class Enemy(GameObject):
 
     def on_draw(self):
         Draw.change_color("#FF0000")
-        Draw.circle(10, 0, 0)
+        Draw.rect(0, 0, 50, 50)

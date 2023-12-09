@@ -76,7 +76,7 @@ class Draw:
             return x, -y
 
     @staticmethod
-    def line(x1, y1, x2, y2, width=1):
+    def line(x1, y1, x2, y2, width=2):
         zone = Draw.__find_zone(x1, y1, x2, y2)
         x1, y1, x2, y2 = Draw.__to_zone0(x1, y1, x2, y2, zone)
 
