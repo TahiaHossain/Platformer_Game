@@ -1,13 +1,13 @@
-from platform import Platform
-from enemy import EnemyOne
+from _platform import Platform
+from enemy import EnemyOne, EnemyTwo, EnemyThree
 from engine.button import Button
 from engine.draw import Draw
 from engine.picocore import PicoCore
 from engine.scene.scene import Scene
 from player import Player
-from random import randint
+from random import randint, choice
 
-
+enemy_types = [EnemyOne, EnemyTwo, EnemyThree]
 class PlayPauseButton(Button):
 
     def __init__(self, core, x, y):
@@ -44,7 +44,9 @@ def get_level_scene(engine: PicoCore) -> Scene:
         x_space = randint(100, 250)
         y_space = randint(100, 250)
         level.add_game_object(Platform(engine, (i * 200) + x_space, y_space, width=200, height=50))
-
+        if i % 4 == 0:
+            enemy = choice((enemy_types))(engine, (i * 200) + x_space, y_space + 50, 100, 100)
+            level.add_game_object(enemy)
     level.add_ui_object(play_pause_button)
     level.camera.follow(player, 300, 300)
 

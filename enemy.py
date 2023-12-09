@@ -5,8 +5,8 @@ from engine.picocore import PicoCore
 from _platform import Platform
 
 class Enemy(GameObject):
-    def __init__(self, core, x, y, height=80, width=20):
-        super().__init__(core, x, y)
+    def __init__(self, core, x, y, height=80, width=20, debug=False):
+        super().__init__(core, x, y, width, height, debug=debug)
         self.height = height
         self.width = width
 
@@ -36,8 +36,8 @@ class Enemy(GameObject):
         pass
 
 class EnemyOne(Enemy):
-    def __init__(self, core, x, y, height=80, width=20):
-        super().__init__(core, x, y)
+    def __init__(self, core, x, y, height=80, width=20, debug=False):
+        super().__init__(core, x, y, width, height, debug=debug)
         
     def on_draw(self):
         Draw.change_color("#FF0000")
