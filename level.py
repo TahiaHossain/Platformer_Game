@@ -141,7 +141,6 @@ def get_level_scene(engine: PicoCore) -> Scene:
     level.add_ui_object(HealthLabel(engine, str(PicoCore.get_state("lives")), engine.width - 120, 40))
     level.add_ui_object(GameOverLabel(engine, player))
 
-    level.add_game_object(Fruit(engine, 400, 300))
     level.add_game_object(player)
 
     level.camera.follow(player, 300, 300)
