@@ -23,7 +23,7 @@ class Player(GameObject):
             "double_jump": True,
             "dash": True,
         }
-        self.health = 1
+        self.health = 3
         self.score = 0
         self.last_dash = time.time()
 
