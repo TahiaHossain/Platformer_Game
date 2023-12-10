@@ -5,6 +5,7 @@ from fruit import Fruit
 from enemy import EnemyOne, EnemyTwo, EnemyThree
 from engine.button import Button
 from engine.draw import Draw
+from engine.label import Label
 from engine.picocore import PicoCore
 from engine.scene.scene import Scene
 from player import Player
@@ -57,10 +58,34 @@ class Ability(Label):
         Draw.text(self.text, 0, 0, size=20)
         Draw.change_color("#FFFFFF")
 
+class FPSLabel(Label):
+
+    def on_update(self, delta_time):
+        super().on_update(delta_time)
+        self.text = str(round(1000 / delta_time))
+
+
+class HealthLabel(Label):
+
+    def on_update(self, delta_time):
+        super().on_update(delta_time)
+        self.text = str(PicoCore.get_state("lives")) + " LIVES"
+
+
+class ScoreLabel(Label):
+
+    def on_update(self, delta_time):
+        super().on_update(delta_time)
+        self.text = "SCORE " + str(PicoCore.get_state("score"))
+
+
 def get_level_scene(engine: PicoCore) -> Scene:
     level = Scene(engine)
 
-    player = Player(engine, 100, 500, debug=False)
+    PicoCore.set_state("lives", 3)
+    PicoCore.set_state("score", 0)
+
+    player = Player(engine, 200, 500)
     enemy = EnemyOne(engine, 200, 200, 100, 100)
 
     play_pause_button = PlayPauseButton(engine, engine.width / 2, engine.height - 50)
@@ -68,22 +93,25 @@ def get_level_scene(engine: PicoCore) -> Scene:
     dash_ability = Ability(engine, "DASH", 200, 50, "dash", player)
     
     for i in range(50):
-        x_space = randint(100, 250)
-        y_space = randint(100, 250)
-        falling = bool(getrandbits(1)) and i != 0  # first block should not fall
-        
-        level.add_game_object(Block(engine, (i * 300) + x_space, y_space, width=200, height=50, falling=falling))
-        
-        if i % 4 == 0 and i != 0:
-            enemy = choice((enemy_types))(engine, (i * 300 + 50) + x_space, y_space + 50, 100, 100, debug=False)
+        x_space = randint(100, 200)
+        y_space = randint(100, 200)
+        falling_chance = randint(0, 10)  # first block should not fall
+        level.add_game_object(
+            Block(engine, (i * 200) + x_space, y_space, width=200, height=50, falling=falling_chance < 4 and i != 0))
+        if i % 8 == 0 and i > 4:
+            enemy = choice(enemy_types)(engine, (i * 200) + x_space, y_space + 50, 100, 100)
             level.add_game_object(enemy)
-
-    level.add_game_object(Fruit(engine, 400, 300))
-    level.add_game_object(player)
+    
     level.add_ui_object(play_pause_button)
-    level.add_ui_object(BackButton(engine, 40, engine.height - 50))
+    level.add_ui_object(BackButton(engine, 40, engine.height - 50))    
+    level.add_ui_object(FPSLabel(engine, "0", engine.width - 80, engine.height - 50))
+    level.add_ui_object(ScoreLabel(engine, str(PicoCore.get_state("score")), 40, 40))
+    level.add_ui_object(HealthLabel(engine, str(PicoCore.get_state("lives")), engine.width - 120, 40))
     level.add_ui_object(double_jump_ability)
     level.add_ui_object(dash_ability)
+    
+    level.add_game_object(Fruit(engine, 400, 300))
+    level.add_game_object(player)
     
     level.camera.follow(player, 300, 300)
     return level
