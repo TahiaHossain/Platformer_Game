@@ -3,6 +3,7 @@ from block import Block
 from enemy import EnemyOne, EnemyTwo, EnemyThree
 from engine.button import Button
 from engine.draw import Draw
+from engine.label import Label
 from engine.picocore import PicoCore
 from engine.scene.scene import Scene
 from fruit import Fruit
@@ -34,8 +35,32 @@ class PlayPauseButton(Button):
             Draw.line(20, 0, 20, -25, width=2)
 
 
+class FPSLabel(Label):
+
+    def on_update(self, delta_time):
+        super().on_update(delta_time)
+        self.text = str(round(1000 / delta_time))
+
+
+class HealthLabel(Label):
+
+    def on_update(self, delta_time):
+        super().on_update(delta_time)
+        self.text = str(PicoCore.get_state("lives")) + " LIVES"
+
+
+class ScoreLabel(Label):
+
+    def on_update(self, delta_time):
+        super().on_update(delta_time)
+        self.text = "SCORE " + str(PicoCore.get_state("score"))
+
+
 def get_level_scene(engine: PicoCore) -> Scene:
     level = Scene(engine)
+
+    PicoCore.set_state("lives", 3)
+    PicoCore.set_state("score", 0)
 
     player = Player(engine, 100, 500, debug=True)
     enemy = EnemyOne(engine, 200, 200, 100, 100)
@@ -46,7 +71,7 @@ def get_level_scene(engine: PicoCore) -> Scene:
     for i in range(50):
         x_space = randint(100, 250)
         y_space = randint(100, 250)
-        falling = bool(getrandbits(1)) and i is not 0  # first block should not fall
+        falling = bool(getrandbits(1)) and i != 0  # first block should not fall
         level.add_game_object(Block(engine, (i * 300) + x_space, y_space, width=200, height=50, falling=falling))
         if i % 4 == 0:
             enemy = choice(enemy_types)(engine, (i * 200) + x_space, y_space + 50, 100, 100, debug=True)
@@ -56,6 +81,9 @@ def get_level_scene(engine: PicoCore) -> Scene:
 
     level.add_ui_object(play_pause_button)
     level.add_ui_object(BackButton(engine, 40, engine.height - 50))
+    level.add_ui_object(FPSLabel(engine, "0", engine.width - 80, engine.height - 50))
+    level.add_ui_object(ScoreLabel(engine, str(PicoCore.get_state("score")), 40, 40))
+    level.add_ui_object(HealthLabel(engine, str(PicoCore.get_state("lives")), engine.width - 120, 40))
     level.camera.follow(player, 300, 300)
 
     return level
