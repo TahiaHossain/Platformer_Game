@@ -22,7 +22,7 @@ class Player(GameObject):
     def jump(self, physics_component: PhysicsComponent, delta_time):
         self.jump_counter += 1
         if self.abilities["double_jump"] and self.jump_counter < 3:
-            physics_component.velocity_y += 50 * delta_time
+            physics_component.velocity_y += 20 * delta_time
 
     def on_start(self):
         self.add_component(PhysicsComponent(self))

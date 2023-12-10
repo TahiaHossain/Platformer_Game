@@ -137,7 +137,7 @@ class PicoCore:
                         scene.remove_game_object(game_object)
 
         glutPostRedisplay()
-        glutTimerFunc(16, self.__update, 0)
+        glutTimerFunc(1, self.__update, 0)
 
     def exit(self):
         glutLeaveMainLoop()
