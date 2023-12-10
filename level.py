@@ -58,6 +58,27 @@ class Ability(Label):
         Draw.text(self.text, 0, 0, size=20)
         Draw.change_color("#FFFFFF")
 
+class gameOverLabel(Label):
+    def __init__(self, core, player):
+        super().__init__(core,"GAME OVER",(core.width / 2), (core.height / 2) + 100)
+        self.player = player
+        self.game_over = False
+    def on_start(self):
+        pass
+
+    def on_click(self):
+        pass
+
+    def on_update(self, delta_time):
+        if self.player.health <= 0:
+            self.game_over = True
+
+    def on_draw(self):
+        if self.game_over:
+            Draw.change_color("#FF0000")
+            Draw.text(self.text, 0, 0, size=30)
+            Draw.change_color("#FFFFFF")
+
 class FPSLabel(Label):
 
     def on_update(self, delta_time):
@@ -82,22 +103,22 @@ class ScoreLabel(Label):
 def get_level_scene(engine: PicoCore) -> Scene:
     level = Scene(engine)
 
-    PicoCore.set_state("lives", 3)
-    PicoCore.set_state("score", 0)
-
     player = Player(engine, 200, 500)
-    enemy = EnemyOne(engine, 200, 200, 100, 100)
+    
+    PicoCore.set_state("lives", player.health)
+    PicoCore.set_state("score", player.score)
+
 
     play_pause_button = PlayPauseButton(engine, engine.width / 2, engine.height - 50)
-    double_jump_ability = Ability(engine, "JUMP", 50, 50, "double_jump", player)
-    dash_ability = Ability(engine, "DASH", 200, 50, "dash", player)
+    double_jump_ability = Ability(engine, "JUMP", 50, 90, "double_jump", player)
+    dash_ability = Ability(engine, "DASH", 200, 90, "dash", player)
     
-    for i in range(50):
+    for i in range(100):
         x_space = randint(100, 200)
         y_space = randint(100, 200)
         falling_chance = randint(0, 10)  # first block should not fall
         level.add_game_object(
-            Block(engine, (i * 200) + x_space, y_space, width=200, height=50, falling=falling_chance < 4 and i != 0))
+            Block(engine, (i * 300) + x_space, y_space, width=200, height=50, falling=falling_chance < 4 and i != 0))
         if i % 8 == 0 and i > 4:
             enemy = choice(enemy_types)(engine, (i * 200) + x_space, y_space + 50, 100, 100)
             level.add_game_object(enemy)
@@ -105,10 +126,11 @@ def get_level_scene(engine: PicoCore) -> Scene:
     level.add_ui_object(play_pause_button)
     level.add_ui_object(BackButton(engine, 40, engine.height - 50))    
     level.add_ui_object(FPSLabel(engine, "0", engine.width - 80, engine.height - 50))
-    level.add_ui_object(ScoreLabel(engine, str(PicoCore.get_state("score")), 40, 40))
-    level.add_ui_object(HealthLabel(engine, str(PicoCore.get_state("lives")), engine.width - 120, 40))
     level.add_ui_object(double_jump_ability)
     level.add_ui_object(dash_ability)
+    level.add_ui_object(ScoreLabel(engine, str(PicoCore.get_state("score")), 40, 40))
+    level.add_ui_object(HealthLabel(engine, str(PicoCore.get_state("lives")), engine.width - 120, 40))
+    level.add_ui_object(gameOverLabel(engine, player))
     
     level.add_game_object(Fruit(engine, 400, 300))
     level.add_game_object(player)

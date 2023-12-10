@@ -15,14 +15,15 @@ class Player(GameObject):
         self.height = height
         self.width = width
         self.jump_counter = 0
+        self.dead = False
         self.speed = 2
         
         self.abilities = {
             "double_jump": True,
             "dash": True,
         }
-        self.health = 100
-        self.max_health = 100
+        self.health = 1
+        self.score = 0
         self.last_dash = time.time()
         
     def jump(self, physics_component: PhysicsComponent, delta_time):
@@ -76,6 +77,10 @@ class Player(GameObject):
         physics_component: PhysicsComponent = self.get_component(PhysicsComponent)
         collider_component: ColliderComponent = self.get_component(ColliderComponent)
 
+        if self.health <= 0:
+            self.dead = True
+            self.scene.paused = True
+        
         if physics_component is not None:
             
             if time.time() - self.last_dash > 1:
@@ -86,6 +91,8 @@ class Player(GameObject):
             
     def on_draw(self):
         Draw.change_color("#ffc0cb")
+        if self.dead:
+            Draw.change_color("#FF0000")
         Draw.circle(25, -12, -20, False, 3)
         Draw.circle(25, -12, -20, False, 3)
         Draw.circle(25, -12, -20, False, 3)
@@ -93,12 +100,16 @@ class Player(GameObject):
         Draw.line(8, -20, -22, -60)
         Draw.line(18, -20, 48, -60)
         Draw.line(-22, -60, 48, -60)
-        # left eye
-        Draw.line(7, 16, 0, 8)
-        Draw.line(7, 16, 10, 8)
-        # right eye
-        Draw.line(23, 16, 17, 8)
-        Draw.line(23, 16, 27, 8)
+        if self.dead:
+            Draw.text("X", 0, 15)
+            Draw.text("X", 15, 15)
+        else:
+            # left eye
+            Draw.line(7, 16, 0, 8)
+            Draw.line(7, 16, 10, 8)
+            # right eye
+            Draw.line(23, 16, 17, 8)
+            Draw.line(23, 16, 27, 8)
         # left beard
         Draw.line(8, -2, -24, 10)
         Draw.line(8, -4, -24, 0)

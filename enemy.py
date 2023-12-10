@@ -1,6 +1,7 @@
 from engine.component.builtins import RigidBodyComponent, PhysicsComponent, ColliderComponent
 from engine.draw import Draw
 from engine.game_object import GameObject
+from engine.picocore import PicoCore
 from player import Player
 from bullet import Bullet
 class Enemy(GameObject):
@@ -29,11 +30,15 @@ class Enemy(GameObject):
                 for collided_with in physics_component.collisions:
                     if isinstance(collided_with, Player):
                         physics_component.ignore_collisions = False
-                        collided_with.health -= 10
+                        collided_with.health -= 1
+                        PicoCore.set_state("lives", collided_with.health)
                         self.to_remove = True
-                        print(collided_with.health)
+
                     elif isinstance(collided_with, Bullet):
                         self.to_remove = True
+                        current_score = PicoCore.get_state("score")
+                        current_score += 10
+                        PicoCore.set_state("score", current_score)
                         collided_with.to_remove = True
                     else:
                         physics_component.ignore_collisions = True
