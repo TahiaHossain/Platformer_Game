@@ -1,15 +1,14 @@
-from abc import ABC
-
 from engine.draw import Draw
-from engine.game_object import GameObject
+from engine.game_object import UiObject
 
 
-class Label(GameObject):
+class Label(UiObject):
 
-    def __init__(self, core, text: str, x, y, size=10, spacing=5, alignment="center"):
+    def __init__(self, core, text: str, x, y, size=10, spacing=5, alignment="center", color="#FFFFFF"):
         self.width = (len(text) * size) + ((len(text) - 1) * spacing)
         super().__init__(core, x, y, width=self.width, height=size)
         self.text = text
+        self.color = color
         self.size = 10
         self.spacing = 5
         self.draw_x = 0
@@ -29,4 +28,5 @@ class Label(GameObject):
         pass
 
     def on_draw(self):
+        Draw.change_color(self.color)
         Draw.text(self.text, self.draw_x, 0, size=self.size, spacing=self.spacing)

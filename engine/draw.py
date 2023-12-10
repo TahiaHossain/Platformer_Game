@@ -297,6 +297,58 @@ class Draw:
             Draw.line(x, y, x + size, y)  # top
             Draw.line(x + size, y, x, y - size)  # diagonal
             Draw.line(x, y - size, x + size, y - size)  # bottom
+        elif char == '.':
+            Draw.line(x + half_size / 2, y - size, x + half_size / 2, y - size)
+        elif char.isdigit() and 0 <= int(char) <= 9:
+            if char == '0':
+                Draw.line(x, y, x, y - size)
+                Draw.line(x, y, x + size, y)
+                Draw.line(x + size, y, x + size, y - size)
+                Draw.line(x, y - size, x + size, y - size)
+            elif char == '1':
+                Draw.line(x + half_size, y, x + half_size, y - size)
+            elif char == '2':
+                Draw.line(x, y, x + size, y)  # top
+                Draw.line(x, y - half_size, x, y - size)  #
+                Draw.line(x, y - half_size, x + size, y - half_size)  # middle
+                Draw.line(x + size, y, x + size, y - half_size)
+                Draw.line(x, y - size, x + size, y - size)
+            elif char == '3':
+                Draw.line(x, y, x + size, y)
+                Draw.line(x, y - half_size, x + size, y - half_size)
+                Draw.line(x, y - size, x + size, y - size)
+                Draw.line(x + size, y, x + size, y - size)
+            elif char == '4':
+                Draw.line(x, y, x, y - half_size)
+                Draw.line(x, y - half_size, x + size, y - half_size)
+                Draw.line(x + size, y, x + size, y - size)
+            elif char == '5':
+                Draw.line(x + size, y, x, y)
+                Draw.line(x, y, x, y - half_size)
+                Draw.line(x, y - half_size, x + size, y - half_size)
+                Draw.line(x + size, y - half_size, x + size, y - size)
+                Draw.line(x, y - size, x + size, y - size)
+            elif char == '6':
+                Draw.line(x + size, y, x, y)
+                Draw.line(x, y, x, y - size)
+                Draw.line(x, y - size, x + size, y - size)
+                Draw.line(x + size, y - half_size, x, y - half_size)
+                Draw.line(x + size, y - half_size, x + size, y - size)
+            elif char == '7':
+                Draw.line(x, y, x + size, y)
+                Draw.line(x + size, y, x + size, y - size)
+            elif char == '8':
+                Draw.line(x, y, x, y - size)
+                Draw.line(x, y, x + size, y)
+                Draw.line(x + size, y, x + size, y - size)
+                Draw.line(x, y - size, x + size, y - size)
+                Draw.line(x, y - half_size, x + size, y - half_size)
+            elif char == '9':
+                Draw.line(x, y, x, y - half_size)  # left top vertical
+                Draw.line(x, y, x + size, y)  # top
+                Draw.line(x + size, y, x + size, y - size)
+                Draw.line(x, y - size, x + size, y - size)
+                Draw.line(x, y - half_size, x + size, y - half_size)  # middle
 
     @staticmethod
     def background(color: str):
