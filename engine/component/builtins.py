@@ -135,7 +135,6 @@ class PhysicsComponent(Component):
     def resolve_collision(self, other_object):
         if self.collider.static:
             return
-        # Prevent the game object from falling through the floor
         other_collider = other_object.get_component(ColliderComponent)
 
         dx = (self.game_object.x + self.collider.width / 2) - (other_object.x + other_collider.width / 2)

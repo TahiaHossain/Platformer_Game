@@ -50,7 +50,7 @@ class Player(GameObject):
     def handle_shooting(self, delta_time):
         if PicoCore.is_pressed(Keys.LMB) and not self.processing_click:
             self.processing_click = True
-            self.scene.add_game_object(Bullet(self.core, self.x, self.y))
+            self.scene.add_game_object(Bullet(self.core, self.x + 30, self.y))
 
         if self.processing_click:
             self.processing_clock += delta_time
