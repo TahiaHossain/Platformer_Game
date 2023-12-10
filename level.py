@@ -62,19 +62,20 @@ def get_level_scene(engine: PicoCore) -> Scene:
     PicoCore.set_state("lives", 3)
     PicoCore.set_state("score", 0)
 
-    player = Player(engine, 100, 500, debug=True)
+    player = Player(engine, 200, 500)
     enemy = EnemyOne(engine, 200, 200, 100, 100)
 
     play_pause_button = PlayPauseButton(engine, engine.width / 2, engine.height - 50)
 
     level.add_game_object(player)
     for i in range(50):
-        x_space = randint(100, 250)
-        y_space = randint(100, 250)
-        falling = bool(getrandbits(1)) and i != 0  # first block should not fall
-        level.add_game_object(Block(engine, (i * 300) + x_space, y_space, width=200, height=50, falling=falling))
-        if i % 4 == 0:
-            enemy = choice(enemy_types)(engine, (i * 200) + x_space, y_space + 50, 100, 100, debug=True)
+        x_space = randint(100, 200)
+        y_space = randint(100, 200)
+        falling_chance = randint(0, 10)  # first block should not fall
+        level.add_game_object(
+            Block(engine, (i * 200) + x_space, y_space, width=200, height=50, falling=falling_chance < 4 and i != 0))
+        if i % 8 == 0 and i > 4:
+            enemy = choice(enemy_types)(engine, (i * 200) + x_space, y_space + 50, 100, 100)
             level.add_game_object(enemy)
 
     level.add_game_object(Fruit(engine, 400, 300))
