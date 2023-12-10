@@ -22,7 +22,7 @@ def get_scores_scene(engine: PicoCore) -> Scene:
             engine,
             f"{i + 1}. {high_score['score']}",
             (engine.width / 2),
-            (engine.height / 2) - (i * 100),
+            (engine.height / 2) - (i * 25),
             alignment="center"
         )
         score_scene.add_ui_object(score_label)

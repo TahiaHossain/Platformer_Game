@@ -4,6 +4,7 @@ from engine.label import Label
 from engine.picocore import PicoCore
 from engine.scene.scene import Scene
 from level import get_level_scene
+from scores import get_scores_scene
 
 
 class PlayOption(Button):
@@ -31,7 +32,7 @@ class ScoreOption(Button):
         super().__init__(core, x, y, width=140, height=40)
 
     def on_click(self):
-        self.core.get_scene_manager().set_current_scene("scores")
+        self.core.get_scene_manager().add_scene("scores", get_scores_scene(self.core), set_current=True)
 
     def on_draw(self):
         Draw.change_color("#33E6FF")

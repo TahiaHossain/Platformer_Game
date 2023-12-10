@@ -226,7 +226,7 @@ class Draw:
         elif char == 'J':
             Draw.line(x + size, y, x + size, y - size)  # right
             Draw.line(x, y - size, x + size, y - size)  # bottom
-            Draw.line(x + half_size, y, x + half_size, y - half_size)  # top_right
+            Draw.line(x, y - half_size, x, y - size)  # top_right
         elif char == 'K':
             Draw.line(x, y, x, y - size)  # left
             Draw.line(x, y - half_size, x + size, y)  # top_right

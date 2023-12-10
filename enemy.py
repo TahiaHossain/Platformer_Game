@@ -4,6 +4,8 @@ from engine.game_object import GameObject
 from engine.picocore import PicoCore
 from player import Player
 from bullet import Bullet
+
+
 class Enemy(GameObject):
     def __init__(self, core, x, y, height=80, width=20, debug=False):
         super().__init__(core, x, y, width, height, debug=debug)
@@ -26,7 +28,7 @@ class Enemy(GameObject):
         if physics_component is not None:
             physics_component.velocity_x -= 1 * delta_time
             if len(physics_component.collisions) > 0 and collider_component is not None:
-                    
+
                 for collided_with in physics_component.collisions:
                     if isinstance(collided_with, Player):
                         physics_component.ignore_collisions = False
@@ -42,7 +44,6 @@ class Enemy(GameObject):
                         collided_with.to_remove = True
                     else:
                         physics_component.ignore_collisions = True
-                        
 
     def on_draw(self):
         pass
