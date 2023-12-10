@@ -1,9 +1,11 @@
+from back_button import BackButton
 from block import Block
 from enemy import EnemyOne, EnemyTwo, EnemyThree
 from engine.button import Button
 from engine.draw import Draw
 from engine.picocore import PicoCore
 from engine.scene.scene import Scene
+from fruit import Fruit
 from player import Player
 from random import randint, choice, getrandbits
 
@@ -44,13 +46,16 @@ def get_level_scene(engine: PicoCore) -> Scene:
     for i in range(50):
         x_space = randint(100, 250)
         y_space = randint(100, 250)
-        falling = bool(getrandbits(1))
+        falling = bool(getrandbits(1)) and i is not 0  # first block should not fall
         level.add_game_object(Block(engine, (i * 300) + x_space, y_space, width=200, height=50, falling=falling))
         if i % 4 == 0:
             enemy = choice(enemy_types)(engine, (i * 200) + x_space, y_space + 50, 100, 100, debug=True)
             level.add_game_object(enemy)
 
+    level.add_game_object(Fruit(engine, 400, 300))
+
     level.add_ui_object(play_pause_button)
+    level.add_ui_object(BackButton(engine, 40, engine.height - 50))
     level.camera.follow(player, 300, 300)
 
     return level

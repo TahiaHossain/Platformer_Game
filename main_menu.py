@@ -3,6 +3,7 @@ from engine.draw import Draw
 from engine.label import Label
 from engine.picocore import PicoCore
 from engine.scene.scene import Scene
+from level import get_level_scene
 
 
 class PlayOption(Button):
@@ -11,7 +12,7 @@ class PlayOption(Button):
         super().__init__(core, x, y, width=140, height=40)
 
     def on_click(self):
-        self.core.get_scene_manager().set_current_scene("level_one")
+        self.core.get_scene_manager().add_scene("level_one", get_level_scene(self.core), set_current=True)
 
     def on_draw(self):
         Draw.change_color("#2FF518")

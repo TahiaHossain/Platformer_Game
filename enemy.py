@@ -1,8 +1,8 @@
+from block import Block
 from engine.component.builtins import RigidBodyComponent, PhysicsComponent, ColliderComponent
 from engine.draw import Draw
 from engine.game_object import GameObject
-from engine.picocore import PicoCore
-from block import Block
+
 
 class Enemy(GameObject):
     def __init__(self, core, x, y, height=80, width=20, debug=False):
@@ -12,7 +12,7 @@ class Enemy(GameObject):
 
     def on_start(self):
         self.add_component(PhysicsComponent(self))
-        self.add_component(RigidBodyComponent(self, gravity=2000))
+        # self.add_component(RigidBodyComponent(self, gravity=2000))
         self.add_component(ColliderComponent(self, self.width, self.height))
 
     def on_update(self, delta_time):
@@ -35,10 +35,11 @@ class Enemy(GameObject):
     def on_draw(self):
         pass
 
+
 class EnemyOne(Enemy):
     def __init__(self, core, x, y, height=80, width=20, debug=False):
         super().__init__(core, x, y, width, height, debug=debug)
-        
+
     def on_draw(self):
         Draw.change_color("#FF0000")
         Draw.rect(0, 0, 45, 45)
@@ -64,7 +65,7 @@ class EnemyOne(Enemy):
 class EnemyTwo(Enemy):
     def __init__(self, core, x, y, height=80, width=20, debug=False):
         super().__init__(core, x, y, width, height, debug=debug)
-        
+
     def on_draw(self):
         # enemy 2
         Draw.change_color("#FF00FF")
@@ -91,7 +92,7 @@ class EnemyTwo(Enemy):
 class EnemyThree(Enemy):
     def __init__(self, core, x, y, height=80, width=20, debug=False):
         super().__init__(core, x, y, width, height, debug=debug)
-            
+
     def on_draw(self):
         # enemy 3
         Draw.change_color("#00FFFF")
