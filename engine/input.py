@@ -10,6 +10,10 @@ class Keys:
     a = Key(b'a')
     s = Key(b's')
     d = Key(b'd')
+    e = Key(b'e')
+    f = Key(b'f')
+    g = Key(b'g')
+    
 
     LEFT = Key(100)
     UP = Key(101)

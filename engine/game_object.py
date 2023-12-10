@@ -7,7 +7,7 @@ from engine.draw import Draw
 
 
 class UiObject(ABC):
-    def __init__(self, core, x, y, width, height, scale=1.0, rotation=0.0, debug=False):
+    def __init__(self, core, x, y, width=100, height=100, scale=1.0, rotation=0.0, debug=False):
         self.x = x
         self.y = y
         self.scale = scale

@@ -95,7 +95,8 @@ class PhysicsComponent(Component):
         self.velocity_y = velocity_y
         self.friction = friction
         self.collisions = []
-
+        self.ignore_collisions = False
+        
         if friction > 1.0 or friction < 0.0:
             raise Exception("Invalid friction value. Must be in a range of 0 to 1")
 
@@ -122,7 +123,9 @@ class PhysicsComponent(Component):
             other_collider = other_object.get_component(ColliderComponent)
 
             if self.collider is not None and other_collider is not None and self.collider.collides_with(other_collider):
-                self.resolve_collision(other_object)
+                if not self.ignore_collisions:
+                    self.resolve_collision(other_object)
+                    
                 if other_object not in self.collisions:
                     self.collisions.append(other_object)
             else:

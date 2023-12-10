@@ -5,8 +5,8 @@ from main_menu import get_main_menu
 from scores import get_scores_scene
 
 PLATFORM_SIZE = 50
-WIDTH = 700
-HEIGHT = 500
+WIDTH = 900
+HEIGHT = 700
 
 engine = PicoCore("Platformer", WIDTH, HEIGHT)
 

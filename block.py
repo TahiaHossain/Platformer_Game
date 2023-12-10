@@ -1,7 +1,8 @@
 from engine.component.builtins import ColliderComponent, PhysicsComponent, RigidBodyComponent
 from engine.draw import Draw
 from engine.game_object import GameObject
-
+from enemy import Enemy
+from player import Player
 
 class Block(GameObject):
     def __init__(self, core, x, y, width=200, height=50, falling=False, debug=False):
@@ -9,7 +10,7 @@ class Block(GameObject):
         self.width = width
         self.height = height
         self.falling = falling
-
+        self.color = "#FFFFFF"
         self.top = y
         self.left = x
         self.right = x + width
@@ -29,9 +30,14 @@ class Block(GameObject):
 
         if physics_component is not None:
             if len(physics_component.collisions) > 0 and collider_component is not None:
-                if self.falling:
-                    rigidbody_component.enabled = True
+                for collided_with in physics_component.collisions:
+                    if isinstance(collided_with, Player):
+                        collided_with.jump_counter = 0
+                        collided_with.abilities["double_jump"] = True                     
+                        if self.falling:
+                            self.color = "#FF0000"
+                            rigidbody_component.enabled = True
 
     def on_draw(self):
-        Draw.change_color("#FFFFFF")
+        Draw.change_color(self.color)
         Draw.rect(0, 0, self.width, self.height)
