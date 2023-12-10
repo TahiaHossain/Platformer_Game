@@ -1,33 +1,53 @@
-from block import Block
 from engine.component.builtins import RigidBodyComponent, PhysicsComponent, ColliderComponent
 from engine.draw import Draw
 from engine.game_object import GameObject
 from engine.input import Keys
 from engine.picocore import PicoCore
-
+from block import Block
 
 class Player(GameObject):
-
+    
     def __init__(self, core, x, y, width=30, height=80, debug=False):
         super().__init__(core, x, y, width, height, debug=debug)
 
         self.height = height
         self.width = width
         self.jump_counter = 0
-
+        
         self.abilities = {
             "double_jump": True,
+            "dash": True,
         }
-
+        self.health = 100
+        self.max_health = 100
+        
     def jump(self, physics_component: PhysicsComponent, delta_time):
         self.jump_counter += 1
         if self.abilities["double_jump"] and self.jump_counter < 3:
             physics_component.velocity_y += 50 * delta_time
 
+    def dash(self, physics_component: PhysicsComponent, delta_time):
+        physics_component.velocity_x += 100 * delta_time
+    
     def on_start(self):
         self.add_component(PhysicsComponent(self))
         self.add_component(RigidBodyComponent(self, gravity=2000))
         self.add_component(ColliderComponent(self, self.width, self.height))
+
+    def handle_controls(self, physics_component: PhysicsComponent, delta_time):
+        # Vertical Movement
+        if PicoCore.is_pressed(Keys.d):
+            physics_component.velocity_x += 1 * delta_time
+        elif PicoCore.is_pressed(Keys.a):
+            physics_component.velocity_x -= 1 * delta_time
+        
+        # Jump
+        if PicoCore.is_pressed(Keys.SPACE, hold=False):
+            self.jump(physics_component, delta_time)
+
+        # Dash
+        if PicoCore.is_pressed(Keys.e, hold=False):
+            self.dash(physics_component, delta_time)
 
     def on_update(self, delta_time):
         physics_component: PhysicsComponent = self.get_component(PhysicsComponent)
@@ -41,12 +61,7 @@ class Player(GameObject):
                 if isinstance(collided_with, Block):
                     self.jump_counter = 0
 
-            if PicoCore.is_pressed(Keys.d):
-                physics_component.velocity_x += 1 * delta_time
-            elif PicoCore.is_pressed(Keys.a):
-                physics_component.velocity_x -= 1 * delta_time
-            if PicoCore.is_pressed(Keys.SPACE, hold=False):
-                self.jump(physics_component, delta_time)
+            self.handle_controls(physics_component, delta_time)
 
     def on_draw(self):
         Draw.change_color("#ffc0cb")
@@ -76,5 +91,5 @@ class Player(GameObject):
         # nose
         Draw.circle(5, 8, -10, 3)
         # legs
-        Draw.circle(10, -12, -77, False, 3)
-        Draw.circle(10, 17, -77, False, 3)
+        Draw.circle(10, -12, -77,False, 3)
+        Draw.circle(10, 17, -77, False,3)
