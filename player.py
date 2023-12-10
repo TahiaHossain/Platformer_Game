@@ -3,16 +3,19 @@ from engine.draw import Draw
 from engine.game_object import GameObject
 from engine.input import Keys
 from engine.picocore import PicoCore
-from block import Block
+from bullet import Bullet
+import time
 
 class Player(GameObject):
-    
     def __init__(self, core, x, y, width=30, height=80, debug=False):
         super().__init__(core, x, y, width, height, debug=debug)
-
+        self.processing_click = False
+        self.processing_clock = 0
+        
         self.height = height
         self.width = width
         self.jump_counter = 0
+        self.speed = 2
         
         self.abilities = {
             "double_jump": True,
@@ -20,26 +23,46 @@ class Player(GameObject):
         }
         self.health = 100
         self.max_health = 100
+        self.last_dash = time.time()
         
     def jump(self, physics_component: PhysicsComponent, delta_time):
         self.jump_counter += 1
-        if self.abilities["double_jump"] and self.jump_counter < 3:
-            physics_component.velocity_y += 20 * delta_time
+        if self.jump_counter > 3:
+            self.abilities["double_jump"] = False
+    
+        if self.abilities["double_jump"]:
+            physics_component.velocity_y += 50 * delta_time
 
     def dash(self, physics_component: PhysicsComponent, delta_time):
-        physics_component.velocity_x += 100 * delta_time
-    
+        if self.abilities["dash"]:
+            self.last_dash = time.time()
+            physics_component.velocity_x += 100 * delta_time
+            self.abilities["dash"] = False
+
     def on_start(self):
         self.add_component(PhysicsComponent(self))
         self.add_component(RigidBodyComponent(self, gravity=2000))
         self.add_component(ColliderComponent(self, self.width, self.height))
+        self.scene = self.core.get_scene_manager().get_current_scene()
 
+    def handle_shooting(self, delta_time):
+        if PicoCore.is_pressed(Keys.LMB) and not self.processing_click:
+            self.processing_click = True
+            self.scene.add_game_object(Bullet(self.core, self.x, self.y))
+    
+        if self.processing_click:
+            self.processing_clock += delta_time
+
+        if self.processing_clock >= 500:
+            self.processing_click = False
+            self.processing_clock = 0
+    
     def handle_controls(self, physics_component: PhysicsComponent, delta_time):
         # Vertical Movement
         if PicoCore.is_pressed(Keys.d):
-            physics_component.velocity_x += 1 * delta_time
+            physics_component.velocity_x += self.speed * delta_time
         elif PicoCore.is_pressed(Keys.a):
-            physics_component.velocity_x -= 1 * delta_time
+            physics_component.velocity_x -= self.speed * delta_time
         
         # Jump
         if PicoCore.is_pressed(Keys.SPACE, hold=False):
@@ -54,15 +77,13 @@ class Player(GameObject):
         collider_component: ColliderComponent = self.get_component(ColliderComponent)
 
         if physics_component is not None:
-
-            if len(physics_component.collisions) > 0 and collider_component is not None:
-                collided_with = physics_component.collisions[0]
-
-                if isinstance(collided_with, Block):
-                    self.jump_counter = 0
+            
+            if time.time() - self.last_dash > 1:
+                self.abilities["dash"] = True
 
             self.handle_controls(physics_component, delta_time)
-
+            self.handle_shooting(delta_time)
+            
     def on_draw(self):
         Draw.change_color("#ffc0cb")
         Draw.circle(25, -12, -20, False, 3)

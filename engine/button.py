@@ -22,7 +22,6 @@ class Button(UiObject, ABC):
         if PicoCore.is_pressed(Keys.LMB) and not self.processing_click:
             self.processing_click = True
             position = PicoCore.get_click_position()
-            print(position)
 
             if self.x < position[0] < self.x + self.width \
                     and self.y > position[1] > self.y - self.height:

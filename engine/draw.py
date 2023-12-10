@@ -197,9 +197,9 @@ class Draw:
             Draw.line(x, y - size, x + size, y - size)  # bottom
         elif char == 'D':
             Draw.line(x, y, x, y - size)  # left
-            Draw.line(x, y, x + half_size, y)  # top_left
-            Draw.line(x, y - size, x + half_size, y - size)  # bottom_left
-            Draw.line(x + half_size, y, x + half_size, y - size)  # right
+            Draw.line(x, y, x + half_size + 8, y)  # top_left
+            Draw.line(x, y - size, x + half_size + 8, y - size)  # bottom_left
+            Draw.line(x + half_size + 8, y, x + half_size + 8, y - size)  # right
         elif char == 'E':
             Draw.line(x, y, x, y - size)  # left
             Draw.line(x, y, x + size, y)  # top

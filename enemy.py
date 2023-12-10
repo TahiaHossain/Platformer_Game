@@ -1,9 +1,8 @@
-from block import Block
 from engine.component.builtins import RigidBodyComponent, PhysicsComponent, ColliderComponent
 from engine.draw import Draw
 from engine.game_object import GameObject
-
-
+from player import Player
+from bullet import Bullet
 class Enemy(GameObject):
     def __init__(self, core, x, y, height=80, width=20, debug=False):
         super().__init__(core, x, y, width, height, debug=debug)
@@ -12,7 +11,6 @@ class Enemy(GameObject):
 
     def on_start(self):
         self.add_component(PhysicsComponent(self))
-        # self.add_component(RigidBodyComponent(self, gravity=2000))
         self.add_component(ColliderComponent(self, self.width, self.height))
 
     def on_update(self, delta_time):
@@ -25,12 +23,21 @@ class Enemy(GameObject):
         collider_component: ColliderComponent = self.get_component(ColliderComponent)
 
         if physics_component is not None:
+            physics_component.velocity_x -= 1 * delta_time
             if len(physics_component.collisions) > 0 and collider_component is not None:
-                collided_with = physics_component.collisions[0]
-                other_collider = collided_with.get_component(ColliderComponent)
-
-                if isinstance(collided_with, Block):
-                    self.y = collided_with.top + self.height
+                    
+                for collided_with in physics_component.collisions:
+                    if isinstance(collided_with, Player):
+                        physics_component.ignore_collisions = False
+                        collided_with.health -= 10
+                        self.to_remove = True
+                        print(collided_with.health)
+                    elif isinstance(collided_with, Bullet):
+                        self.to_remove = True
+                        collided_with.to_remove = True
+                    else:
+                        physics_component.ignore_collisions = True
+                        
 
     def on_draw(self):
         pass
